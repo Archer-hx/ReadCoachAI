@@ -1,77 +1,100 @@
 # ReadCoach AI
 
-ReadCoach AI is Archer's customized open-source AI reading coach for foreign-language learning. It turns any topic into a guided reading lesson with level-aware articles, translations, vocabulary help, grammar analysis, sentence rewrites, and comprehension quizzes.
+这是我整理和维护的一款 AI 外语阅读教练。它可以根据我输入的主题、语言、难度和文章风格，生成适合学习者水平的外语阅读材料，并配套提供译文、词汇解释、语法分析、句子改写和理解测验。
 
-ReadCoach AI 是 Archer 维护的开源 AI 外语阅读教练项目。它可以把任意主题生成适合学习者水平的阅读材料，并提供译文、词汇释义、语法分析、句子改写和理解测验。
+我希望它不只是一个“生成文章”的小工具，而是一个可以辅助日常语言学习的阅读环境：读文章、查单词、看语法、问 AI、做题复习，都尽量放在同一个页面里完成。
 
-Repository: [github.com/Archer-hx/ReadCoachAI](https://github.com/Archer-hx/ReadCoachAI)
+项目地址：[github.com/Archer-hx/ReadCoachAI](https://github.com/Archer-hx/ReadCoachAI)
 
-## Features
+## 我为什么做这个项目
 
-- Generate CEFR A1-C2 reading articles by language, topic, style, and target length.
-- Read with original text, bilingual comparison, or sentence-by-sentence comparison.
-- Hover on words for definitions, part of speech, grammar gender, and examples.
-- Select a sentence to ask AI grammar questions or request rewrites in different styles.
-- Generate vocabulary notes, grammar points, and multiple-choice comprehension quizzes.
-- Save the latest 40 generated articles in browser `localStorage`.
-- Run as a standalone HTML file with no build step and no server requirement.
+学习外语时，我经常需要符合自己水平的阅读材料。普通文章可能太难，教材内容又不一定贴近我当下感兴趣的话题。ReadCoach AI 的目标就是解决这个问题：
 
-## 功能亮点
+- 我可以自己指定主题，比如旅行、科技、历史、日常生活或任意自定义内容。
+- 我可以选择目标语言和 CEFR 难度，从 A1 到 C2 都能覆盖。
+- 我可以边读边查词、看翻译、问语法，不需要在多个工具之间来回切换。
+- 我可以通过自动生成的测验检查自己有没有真正读懂。
 
-- 按语言、题材、风格、词数和 CEFR 等级生成外语阅读文章。
-- 支持原文、双栏对照、逐句对照三种阅读方式。
-- 鼠标悬停单词即可查看释义、词性、语法性别和例句。
-- 选中句子后可以向 AI 提问语法，也可以改写为不同表达风格。
-- 自动生成词汇、语法要点和多选理解测验。
-- 最近 40 篇文章保存在浏览器本地 `localStorage`。
-- 单个 HTML 文件即可运行，不需要构建工具或后端服务。
+## 主要功能
 
-## Quick Start
+- **AI 文章生成**：按目标语言、CEFR 等级、文章风格、指定题材和目标词数生成阅读文章。
+- **多种阅读模式**：支持原文阅读、双栏对照和逐句对照。
+- **悬停查词**：鼠标停在单词上，可以查看释义、词性、语法性别和例句。
+- **句子级 AI 辅导**：选中句子后，可以询问语法、时态、句子结构或更自然的表达方式。
+- **句子改写**：可以把句子改写得更简单、更正式、更口语化或更接近母语者表达。
+- **语法和词汇分析**：自动提取文章中的重点语法和核心词汇。
+- **理解测验**：根据文章自动生成多选题，帮助我检查阅读理解情况。
+- **历史记录**：最近生成的文章会保存在浏览器本地，方便之后复习。
+- **主题切换**：支持深色和浅色界面。
 
-1. Open `ReadCoachAI.html` in a modern browser.
-2. Get an API key from the [DeepSeek Open Platform](https://platform.deepseek.com/).
-3. Click **API Key** in the right panel, enter your key, and choose a model.
-4. Select the target language, CEFR level, article style, topic, and word count.
-5. Click **生成文章** to generate the article, translation, analysis, and quiz.
+## 使用方式
 
-## 快速开始
+这个项目不需要安装，也不需要后端服务。最简单的方式是直接打开单文件版本：
 
-1. 用浏览器打开 `ReadCoachAI.html`。
-2. 前往 [DeepSeek 开放平台](https://platform.deepseek.com/) 申请 API Key。
-3. 点击右侧面板的 **API Key**，输入 Key 并选择模型。
-4. 选择学习语言、CEFR 等级、文章风格、指定题材和目标词数。
-5. 点击 **生成文章**，系统会依次生成文章、译文、分析和测验。
+1. 下载或克隆本仓库。
+2. 用浏览器打开 `ReadCoachAI.html`。
+3. 前往 [DeepSeek 开放平台](https://platform.deepseek.com/) 申请 API Key。
+4. 在右侧面板点击 **API Key**，填入自己的 Key 并选择模型。
+5. 在左侧设置学习语言、译文语言、难度等级、文章风格、题材和词数。
+6. 点击 **生成文章**，等待文章、译文、词汇语法分析和测验依次生成。
 
-## Privacy
+如果要查看拆分后的源码版本，可以用本地静态服务器打开 `src/`：
 
-The project does not include any API key. The key entered by the user is stored only in browser `localStorage` and is sent directly to the DeepSeek API endpoint when requests are made.
+```bash
+python -m http.server 8000
+```
 
-本项目不内置任何 API Key。用户输入的 Key 只保存在浏览器本地 `localStorage` 中，请求时直接发送给 DeepSeek API。
+然后在浏览器访问：
 
-## Repository Structure
+```text
+http://localhost:8000/src/
+```
+
+## 隐私说明
+
+本项目没有内置任何 API Key，也没有自己的后端服务器。
+
+用户输入的 API Key 只会保存在当前浏览器的 `localStorage` 中。发起 AI 请求时，Key 会直接发送到 DeepSeek API，用于完成文章生成、解释、改写和测验生成等功能。
+
+如果你在公共电脑上使用，建议使用后手动清除浏览器本地数据。
+
+## 项目结构
 
 ```text
 ReadCoachAI/
-├── ReadCoachAI.html      # Standalone single-file app
-├── src/                  # Split source version for development
+├── ReadCoachAI.html      # 单文件版本，直接用浏览器打开即可运行
+├── src/                  # 拆分后的源码版本，方便后续维护
 │   ├── index.html
 │   ├── css/
 │   └── js/
-├── README.md
-├── NOTICE.md
-└── LICENSE
+├── README.md             # 项目说明
+├── NOTICE.md             # 开源来源和维护说明
+└── LICENSE               # MIT License
 ```
 
-The `src/` version should be served with a local static server, for example VS Code Live Server or `python -m http.server`. The standalone `ReadCoachAI.html` file can be opened directly.
+## 技术栈
 
-## Tech Stack
+- 原生 HTML
+- 原生 CSS
+- 原生 JavaScript
+- DeepSeek API
+- Server-Sent Events 流式输出
+- 浏览器 `localStorage`
 
-- Pure HTML, CSS, and JavaScript
-- DeepSeek chat completions API in an OpenAI-compatible format
-- Server-Sent Events streaming
-- Browser `localStorage`
-- Google Fonts: DM Sans and Crimson Pro
+整个项目没有构建流程，也没有额外依赖，适合直接部署为静态页面。
 
-## License
+## 后续计划
 
-This project is released under the [MIT License](LICENSE). See [NOTICE.md](NOTICE.md) for project ownership and open-source attribution notes.
+我后续可能会继续完善这些方向：
+
+- 增加更多 AI 服务商配置。
+- 优化移动端阅读体验。
+- 增加文章导出功能。
+- 增加更完整的学习统计。
+- 改进历史记录管理和复习体验。
+
+## 开源说明
+
+这个仓库是我基于 MIT 开源代码整理和二次开发的版本。原始 MIT 许可声明已保留在 [LICENSE](LICENSE) 中，我对当前仓库的整理、修改和后续维护也继续使用 MIT License 发布。
+
+更多说明可以查看 [NOTICE.md](NOTICE.md)。
