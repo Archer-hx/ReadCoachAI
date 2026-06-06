@@ -4,10 +4,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ReadCoach AI · 智能语言学习</title>
+  <title>ReadCoach AI by Archer · 智能语言学习</title>
+  <meta name="description" content="Archer's customized open-source AI reading coach for foreign-language learning.">
+  <meta name="author" content="Archer">
+  <meta name="repository" content="https://github.com/Archer-hx/ReadCoachAI">
   <style>
     /* ============================================================
-       ReadCoach AI · Refined UI
+       ReadCoach AI · Archer Edition
        Two themes (indigo / violet) × two modes (dark / light).
        Calm neutral palettes, single accent, consistent radii.
        ============================================================ */
@@ -263,6 +266,15 @@
     .logo span {
       color: var(--accent);
       font-weight: 600;
+    }
+
+    .logo .edition {
+      margin-left: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text3);
+      letter-spacing: 0;
+      vertical-align: middle;
     }
 
     /* generic small pill button used across the header — MD3 tonal button */
@@ -2987,7 +2999,7 @@
        TOP BAR
        ═══════════════════════════════════════ -->
   <div class="top-bar">
-    <div class="logo">ReadCoach<span> AI</span></div>
+    <div class="logo">ReadCoach<span> AI</span><span class="edition">Archer Edition</span></div>
     <div class="top-bar-right">
       <div class="mode-toggle">
         <button class="mode-btn focus-active active" id="modeFocusBtn" onclick="setMode('focus')">专注模式</button>
