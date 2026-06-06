@@ -68,7 +68,7 @@ ReadCoachAI/
 │   ├── css/
 │   └── js/
 ├── README.md             # 项目说明
-├── NOTICE.md             # 开源来源和维护说明
+├── NOTICE.md             # 项目声明
 └── LICENSE               # MIT License
 ```
 
@@ -93,9 +93,3 @@ ReadCoachAI/
 - 增加文章导出功能。
 - 增加更完整的学习统计。
 - 改进历史记录管理和复习体验。
-
-## 开源说明
-
-这个仓库是我基于 MIT 开源代码整理和二次开发的版本。原始 MIT 许可声明已保留在 [LICENSE](LICENSE) 中，我对当前仓库的整理、修改和后续维护也继续使用 MIT License 发布。
-
-更多说明可以查看 [NOTICE.md](NOTICE.md)。
