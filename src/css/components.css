@@ -208,6 +208,7 @@
 
 .api-provider-btns {
   display: flex;
+  flex: 1;
   gap: 4px;
 }
 

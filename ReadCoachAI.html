@@ -487,6 +487,7 @@
 
     .api-provider-btns {
       display: flex;
+      flex: 1;
       gap: 4px;
     }
 
@@ -3247,6 +3248,14 @@
         <!-- API Key inline panel -->
         <div class="right-panel" id="apiKeyDropdown">
           <div class="api-field-row">
+            <label>服务</label>
+            <div class="api-provider-btns">
+              <button class="api-provider-btn active" data-api-provider="deepseek"
+                onclick="setProvider('deepseek')">DeepSeek</button>
+              <button class="api-provider-btn" data-api-provider="kimi" onclick="setProvider('kimi')">Kimi</button>
+            </div>
+          </div>
+          <div class="api-field-row">
             <label>模型</label>
             <select id="apiModelSelect" class="api-model-select" onchange="setModel(this.value)"></select>
           </div>
@@ -3257,7 +3266,7 @@
           <div class="api-field-row" style="justify-content:space-between">
             <div style="display:flex;align-items:center;gap:6px">
               <div class="api-status" id="apiStatus"></div>
-              <span style="font-size:11px;color:var(--text3)">DeepSeek</span>
+              <span id="apiProviderName" style="font-size:11px;color:var(--text3)">DeepSeek</span>
             </div>
             <button class="api-provider-btn active" onclick="toggleDebug()" id="debugToggleBtn"
               style="flex:none;padding:3px 10px">Debug</button>
@@ -3314,12 +3323,32 @@
   <script>
     const HIST_KEY = 'readcoachai_v2_history';
 
-    // ─── API 配置（DeepSeek）───
+    // ─── API 配置（OpenAI-compatible providers）───
     // 如需修改可选模型，直接编辑下方 models 数组即可
     const PROVIDERS = {
-      deepseek: { name: 'DeepSeek', url: 'https://api.deepseek.com/chat/completions', models: ['deepseek-v4-flash', 'deepseek-v4-pro'], placeholder: 'sk-...', type: 'openai' },
+      deepseek: {
+        name: 'DeepSeek',
+        keyLabel: 'Key',
+        url: 'https://api.deepseek.com/chat/completions',
+        models: ['deepseek-v4-flash', 'deepseek-v4-pro'],
+        placeholder: 'sk-...',
+        tokenParam: 'max_tokens',
+        disableThinking: true,
+        type: 'openai'
+      },
+      kimi: {
+        name: 'Kimi',
+        keyLabel: 'Kimi Key',
+        url: 'https://api.moonshot.cn/v1/chat/completions',
+        models: ['kimi-k2.6', 'kimi-k2.5', 'moonshot-v1-32k', 'moonshot-v1-128k', 'moonshot-v1-8k'],
+        placeholder: 'Moonshot API Key',
+        tokenParam: 'max_completion_tokens',
+        disableThinking: true,
+        thinkingModels: ['kimi-k2.6', 'kimi-k2.5'],
+        type: 'openai'
+      },
     };
-    const currentProvider = 'deepseek';
+    let currentProvider = localStorage.getItem('readcoachai_provider') || 'deepseek';
     let currentModel = '';
 
     // Languages with grammatical gender
@@ -3448,12 +3477,22 @@
       $('apiStatus').className = 'api-status' + (getKey().length > 10 ? ' ok' : '');
     }
     function setProvider(provider) {
+      if (!PROVIDERS[provider]) provider = 'deepseek';
+      currentProvider = provider;
+      localStorage.setItem('readcoachai_provider', provider);
       const p = PROVIDERS[provider];
       const stored = localStorage.getItem(`readcoachai_model_${provider}`);
       currentModel = (stored && p.models.includes(stored)) ? stored : p.models[0];
       $('apiModelSelect').innerHTML = p.models.map(m =>
         `<option value="${m}"${m === currentModel ? ' selected' : ''}>${m}</option>`).join('');
-      $('apiKey').value = getKey();
+      $('apiKey').value = localStorage.getItem(`readcoachai_key_${provider}`) || '';
+      $('apiKey').placeholder = p.placeholder || 'sk-...';
+      $('apiKeyLabel').textContent = p.keyLabel || 'Key';
+      const providerName = $('apiProviderName');
+      if (providerName) providerName.textContent = p.name;
+      document.querySelectorAll('[data-api-provider]').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.apiProvider === provider);
+      });
       checkKey();
     }
     function setModel(model) {
@@ -3561,9 +3600,13 @@
       if (!key) throw new Error('请先输入 API Key');
       const provider = PROVIDERS[currentProvider];
 
-      // ── DeepSeek / OpenAI 兼容接口 ──
+      // ── OpenAI-compatible chat completions ──
       const msgs = sys ? [{ role: 'system', content: sys }, ...messages] : messages;
-      const body = { model: currentModel, max_tokens: maxTok, messages: msgs, stream: !!stream, thinking: { type: 'disabled' } };
+      const body = { model: currentModel, messages: msgs, stream: !!stream };
+      body[provider.tokenParam || 'max_tokens'] = maxTok;
+      const shouldDisableThinking = provider.disableThinking &&
+        (!provider.thinkingModels || provider.thinkingModels.some(model => currentModel.startsWith(model)));
+      if (shouldDisableThinking) body.thinking = { type: 'disabled' };
       if (jsonMode) body.response_format = { type: 'json_object' };
       const resp = await fetch(provider.url, {
         method: 'POST',

@@ -255,6 +255,14 @@
         <!-- API Key inline panel -->
         <div class="right-panel" id="apiKeyDropdown">
           <div class="api-field-row">
+            <label>服务</label>
+            <div class="api-provider-btns">
+              <button class="api-provider-btn active" data-api-provider="deepseek"
+                onclick="setProvider('deepseek')">DeepSeek</button>
+              <button class="api-provider-btn" data-api-provider="kimi" onclick="setProvider('kimi')">Kimi</button>
+            </div>
+          </div>
+          <div class="api-field-row">
             <label>模型</label>
             <select id="apiModelSelect" class="api-model-select" onchange="setModel(this.value)"></select>
           </div>
@@ -265,7 +273,7 @@
           <div class="api-field-row" style="justify-content:space-between">
             <div style="display:flex;align-items:center;gap:6px">
               <div class="api-status" id="apiStatus"></div>
-              <span style="font-size:11px;color:var(--text3)">DeepSeek</span>
+              <span id="apiProviderName" style="font-size:11px;color:var(--text3)">DeepSeek</span>
             </div>
             <button class="api-provider-btn active" onclick="toggleDebug()" id="debugToggleBtn"
               style="flex:none;padding:3px 10px">Debug</button>

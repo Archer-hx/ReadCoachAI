@@ -30,12 +30,22 @@ const LEVEL_INDEX = { A1: 0, A2: 1, B1: 2, B2: 3, C1: 4, C2: 5 };
 
 // ─── Provider / Model ───
 function setProvider(provider) {
+  if (!PROVIDERS[provider]) provider = 'deepseek';
+  currentProvider = provider;
+  localStorage.setItem('readcoachai_provider', provider);
   const p = PROVIDERS[provider];
   const stored = localStorage.getItem(`readcoachai_model_${provider}`);
   currentModel = (stored && p.models.includes(stored)) ? stored : p.models[0];
   $('apiModelSelect').innerHTML = p.models.map(m =>
     `<option value="${m}"${m === currentModel ? ' selected' : ''}>${m}</option>`).join('');
-  $('apiKey').value = getKey();
+  $('apiKey').value = localStorage.getItem(`readcoachai_key_${provider}`) || '';
+  $('apiKey').placeholder = p.placeholder || 'sk-...';
+  $('apiKeyLabel').textContent = p.keyLabel || 'Key';
+  const providerName = $('apiProviderName');
+  if (providerName) providerName.textContent = p.name;
+  document.querySelectorAll('[data-api-provider]').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.apiProvider === provider);
+  });
   checkKey();
 }
 

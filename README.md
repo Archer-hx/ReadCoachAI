@@ -33,8 +33,8 @@
 
 1. 下载或克隆本仓库。
 2. 用浏览器打开 `ReadCoachAI.html`。
-3. 前往 [DeepSeek 开放平台](https://platform.deepseek.com/) 申请 API Key。
-4. 在右侧面板点击 **API Key**，填入自己的 Key 并选择模型。
+3. 前往 [DeepSeek 开放平台](https://platform.deepseek.com/) 或 [Kimi 开放平台](https://platform.kimi.com/) 申请 API Key。
+4. 在右侧面板点击 **API Key**，选择 DeepSeek 或 Kimi，填入自己的 Key 并选择模型。
 5. 在左侧设置学习语言、译文语言、难度等级、文章风格、题材和词数。
 6. 点击 **生成文章**，等待文章、译文、词汇语法分析和测验依次生成。
 
@@ -78,6 +78,7 @@ ReadCoachAI/
 - 原生 CSS
 - 原生 JavaScript
 - DeepSeek API
+- Kimi / Moonshot API
 - Server-Sent Events 流式输出
 - 浏览器 `localStorage`
 

@@ -15,9 +15,29 @@ function escA(s) { return String(s).replace(/"/g, '&quot;').replace(/'/g, '&#39;
 const HIST_KEY = 'readcoachai_v2_history';
 
 const PROVIDERS = {
-  deepseek: { name: 'DeepSeek', url: 'https://api.deepseek.com/chat/completions', models: ['deepseek-v4-flash', 'deepseek-v4-pro'], placeholder: 'sk-...', type: 'openai' },
+  deepseek: {
+    name: 'DeepSeek',
+    keyLabel: 'Key',
+    url: 'https://api.deepseek.com/chat/completions',
+    models: ['deepseek-v4-flash', 'deepseek-v4-pro'],
+    placeholder: 'sk-...',
+    tokenParam: 'max_tokens',
+    disableThinking: true,
+    type: 'openai'
+  },
+  kimi: {
+    name: 'Kimi',
+    keyLabel: 'Kimi Key',
+    url: 'https://api.moonshot.cn/v1/chat/completions',
+    models: ['kimi-k2.6', 'kimi-k2.5', 'moonshot-v1-32k', 'moonshot-v1-128k', 'moonshot-v1-8k'],
+    placeholder: 'Moonshot API Key',
+    tokenParam: 'max_completion_tokens',
+    disableThinking: true,
+    thinkingModels: ['kimi-k2.6', 'kimi-k2.5'],
+    type: 'openai'
+  },
 };
-const currentProvider = 'deepseek';
+let currentProvider = localStorage.getItem('readcoachai_provider') || 'deepseek';
 
 const WORDS_MIN = 100, WORDS_MAX = 800;
 
@@ -61,9 +81,13 @@ async function callAPI(messages, sys, stream, onChunk, maxTok = 1000, jsonMode =
   if (!key) throw new Error('请先输入 API Key');
   const provider = PROVIDERS[currentProvider];
 
-  // ── DeepSeek / OpenAI 兼容接口 ──
+  // ── OpenAI-compatible chat completions ──
   const msgs = sys ? [{ role: 'system', content: sys }, ...messages] : messages;
-  const body = { model: currentModel, max_tokens: maxTok, messages: msgs, stream: !!stream, thinking: { type: 'disabled' } };
+  const body = { model: currentModel, messages: msgs, stream: !!stream };
+  body[provider.tokenParam || 'max_tokens'] = maxTok;
+  const shouldDisableThinking = provider.disableThinking &&
+    (!provider.thinkingModels || provider.thinkingModels.some(model => currentModel.startsWith(model)));
+  if (shouldDisableThinking) body.thinking = { type: 'disabled' };
   if (jsonMode) body.response_format = { type: 'json_object' };
   const resp = await fetch(provider.url, {
     method: 'POST',
